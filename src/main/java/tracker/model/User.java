@@ -1,4 +1,4 @@
-package main.java.tracker.model;
+package tracker.model;
 
 public class User {
     public int id;

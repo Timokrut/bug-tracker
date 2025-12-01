@@ -1,7 +1,7 @@
-package main.java.tracker.controller; 
+package tracker.controller; 
 
-import main.java.tracker.model.*; 
-import main.java.tracker.util.DB;
+import tracker.model.*; 
+import tracker.util.DB;
 
 import javax.servlet.*;
 import javax.servlet.http.*;

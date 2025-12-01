@@ -1,4 +1,4 @@
-package main.java.tracker.util;
+package tracker.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager; 

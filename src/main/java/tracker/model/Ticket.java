@@ -1,4 +1,4 @@
-package main.java.tracker.model;
+package tracker.model;
 
 import java.time.LocalDateTime; 
 
