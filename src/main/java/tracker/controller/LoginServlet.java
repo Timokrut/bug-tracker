@@ -33,6 +33,7 @@ public class LoginServlet extends HttpServlet {
             String dbPassword = rs.getString("password");
             if (!dbPassword.equals(password)) {
                 resp.getWriter().write("<h1>Wrong password</h1>");
+                return;
             }
 
             User u = new User();
@@ -43,7 +44,7 @@ public class LoginServlet extends HttpServlet {
 
             HttpSession session = req.getSession();
             session.setAttribute("user", u);
-            resp.sendRedirect("/tickets");
+            resp.sendRedirect(req.getContextPath() + "/tickets");
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
