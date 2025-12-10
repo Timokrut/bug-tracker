@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager; 
 
 public class DB {
-    private static final String URL = "jdbc:postgresql://localhost:5432/bugtracker";
+    private static final String URL = "jdbc:postgresql://localhost:5432/my_db";
     private static final String USER = "my_user";
     private static final String PASSWORD = "my_pass";
 
