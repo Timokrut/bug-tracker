@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>Редактировать тикет</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f9f9f9; }
+        h2 { color: #333; }
+        form { max-width: 450px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1);}
+        label { display: block; margin-top: 15px; font-weight: bold; }
+        input[type="text"], textarea, select {
+            width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            margin-top: 20px; padding: 10px 20px; background-color: #007bff; color: white; border: none;
+            border-radius: 4px; cursor: pointer; font-size: 16px;
+        }
+        button:hover { background-color: #0056b3; }
+        a { display: inline-block; margin-top: 15px; color: #007bff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<h2>Редактировать тикет</h2>
+
+<form method="post" action="/bug-tracker/edit">
+    <input type="hidden" name="id" value="{{id}}">
+
+    <label for="title">Заголовок:</label>
+    <input type="text" id="title" name="title" value="{{title}}" required>
+
+    <label for="description">Описание:</label>
+    <textarea id="description" name="description" rows="5">{{description}}</textarea>
+
+    <label for="type">Тип:</label>
+    <select id="type" name="type">
+        {{typeOptions}}
+    </select>
+
+    <label for="status">Статус:</label>
+    <select id="status" name="status">
+        {{statusOptions}}
+    </select>
+
+    <label for="priority">Приоритет:</label>
+    <select id="priority" name="priority">
+        {{priorityOptions}}
+    </select>
+
+    <label for="assigneeId">Назначить пользователю:</label>
+    <select id="assigneeId" name="assigneeId">
+        <option value="">Не назначен</option>
+        {{userOptions}}
+    </select>
+
+    <button type="submit">Сохранить</button>
+</form>
+
+<p><a href="/bug-tracker/tickets">Назад к списку тикетов</a></p>
+
+</body>
+</html>
