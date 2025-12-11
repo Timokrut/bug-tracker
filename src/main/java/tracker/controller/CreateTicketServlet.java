@@ -16,6 +16,12 @@ import java.nio.charset.StandardCharsets;
 public class CreateTicketServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        User user = (User) req.getSession().getAttribute("user");
+        if (user == null) {
+            resp.sendRedirect(req.getContextPath() + "/login");
+            return;
+        }
+        
         resp.setContentType("text/html; charset=UTF-8");
 
         InputStream is = getServletContext().getResourceAsStream("/create.html");
@@ -51,17 +57,17 @@ public class CreateTicketServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         User user = (User) req.getSession().getAttribute("user");
-        if (user == null) {
-            resp.sendRedirect(req.getContextPath() + "/login");
-            return;
-        }
-
+        
         String title = req.getParameter("title");
         String description = req.getParameter("description");
         String type = req.getParameter("type");
         String priority = req.getParameter("priority");
         String assigneeId = req.getParameter("assigneeId");
-        
+
+        // User cant assign anyone to task except himself
+        if (user.role.toString().equals("USER") && Integer.parseInt(assigneeId) != user.id) {
+            assigneeId = null;
+        }
 
         try (Connection conn = DB.getConnection()) {
             PreparedStatement st = conn.prepareStatement(

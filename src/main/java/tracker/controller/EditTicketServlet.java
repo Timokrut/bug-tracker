@@ -20,6 +20,29 @@ public class EditTicketServlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
+
+        try (Connection conn = DB.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement(
+                "SELECT assignee_id FROM tickets WHERE id=?");
+            ps.setInt(1, Integer.parseInt(req.getParameter("id")));
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int a = rs.getInt("assignee_id");
+                Integer assignee = rs.wasNull() ? null : a;
+
+                boolean isManager = user.getRole().equals("MANAGER");
+                boolean isAssigned = (assignee != null && assignee == user.getId());
+                boolean unassigned = (assignee == null);
+
+                if (!isManager && !(isAssigned || unassigned)) {
+                    resp.sendError(403, "У вас нет прав для редактирования этого тикета");
+                    return;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         
         resp.setContentType("text/html; charset=UTF-8");
         PrintWriter w = resp.getWriter();

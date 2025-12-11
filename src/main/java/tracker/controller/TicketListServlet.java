@@ -42,6 +42,10 @@ public class TicketListServlet extends HttpServlet {
         html.append("<p>Роль: ").append(user.role).append("</p>");
 
         html.append("<a class=\"button\" href=\"" + contextPath + "/create\">Создать тикет</a>");
+        if (user.role.toString().equals("MANAGER")) {
+            html.append("<p><a href=\"" + contextPath + "/users\">Управление пользователями</a></p>");
+        }
+
         html.append("<p><a href=\"" + contextPath + "/logout\">Выйти</a></p>");
 
         try (Connection conn = DB.getConnection()) {
@@ -73,7 +77,7 @@ public class TicketListServlet extends HttpServlet {
                     assignee = res.getString("username");
                 }
 
-                if (assignee == null) {
+                if (assignee == null || assignee == "") {
                     assignee = "Нет ответсвенного";
                 }
 
@@ -93,7 +97,16 @@ public class TicketListServlet extends HttpServlet {
                 html.append("<td>").append(assignee).append("</td>");
                 html.append("<td>").append(createdAt).append("</td>");
                 html.append("<td>").append(updatedAt).append("</td>");
-                html.append("<td><a class=\"edit-link\" href=\"" + contextPath + "/edit?id=" + id + "\">Редактировать</a></td>");
+
+                if (user.role.toString().equals("USER") && (!user.username.equals(assignee))) {
+                    html.append("<td>Нет доступных действий</td>");
+                } else {
+                    if (user.role.toString().equals("USER")) {
+                        html.append("<td><a class=\"edit-link\" href=\"" + contextPath + "/edit?id=" + id + "\">Редактировать</a></td>");
+                    } else {
+                        html.append("<td><a class=\"edit-link\" href=\"" + contextPath + "/edit?id=" + id + "\">Редактировать</a><br><a href=\"delete?id=" + id + "\"onclick=\"return confirm('Точно удалить тикет?');\"style=\"color:red;\">Удалить</a></td>");
+                    }
+                }
                 html.append("</tr>");
             }
             html.append("</table>");
@@ -126,7 +139,7 @@ public class TicketListServlet extends HttpServlet {
                     assignee = res.getString("username");
                 }
 
-                if (assignee == "") {
+                if (assignee == null || assignee == "") {
                     assignee = "Нет ответсвенного";
                 }
 
@@ -146,7 +159,17 @@ public class TicketListServlet extends HttpServlet {
                 html.append("<td>").append(assignee).append("</td>");
                 html.append("<td>").append(createdAt).append("</td>");
                 html.append("<td>").append(updatedAt).append("</td>");
-                html.append("<td><a class=\"edit-link\" href=\"" + contextPath + "/edit?id=" + id + "\">Редактировать</a></td>");
+                
+                if (user.role.toString().equals("USER") && (!user.username.equals(assignee))) {
+                    html.append("<td>Нет доступных действий</td>");
+                } else {
+                    if (user.role.toString().equals("USER")) {
+                        html.append("<td><a class=\"edit-link\" href=\"" + contextPath + "/edit?id=" + id + "\">Редактировать</a></td>");
+                    } else {
+                        html.append("<td><a class=\"edit-link\" href=\"" + contextPath + "/edit?id=" + id + "\">Редактировать</a><br><a href=\"delete?id=" + id + "\"onclick=\"return confirm('Точно удалить тикет?');\"style=\"color:red;\">Удалить</a></td>");
+                    }
+                }
+
                 html.append("</tr>");
             }
             html.append("</table>");
